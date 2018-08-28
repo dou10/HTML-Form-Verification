@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Lab 1</title>
+	<style>
+		body {background-color: white;}
+	</style>
+	<script>
+		//First function to run when page loads. There is where all the event listeners start functions when user interacts with page.
+		function start(){
+			var userName = document.getElementById("user_name");
+			var userPassword = document.getElementById("user_password");
+			var sID = document.getElementById("student_id");
+			var butt = document.getElementById("button");
+			var str = document.getElementById("textarea");
+
+			userName.addEventListener("keyup", validate_username);
+			userPassword.addEventListener("keyup", validate_password);
+			sID.addEventListener("keyup", validate_studentid);
+			str.addEventListener("keyup", wordcounter);
+			
+			butt.addEventListener("click", final);
+		}
+
+		//Function that counts the words/locks text area once max words have been reached.
+		function wordcounter(){
+			var max = 24;
+			var str = document.getElementById("textarea");
+			var words = str.value.match(/\S+/g).length; //Calculates number words via counting white spaces
+
+			if (words > max){
+				document.getElementById("textarea").disabled = true; //Disables text area once 25 words have been reached.
+			}
+			document.getElementById('total').innerHTML = 25 - words + " words left";  //Displays words left to type.
+
+		}
+		//Validates username by checking if its blank or has only letters. Returns false if invalid input.
+		function validate_username(){
+			var letters = /^[A-Za-z]+$/;
+			var userName = document.getElementById("user_name");
+				if(userName.value =="" || !userName.value.match(letters)){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+
+		//Validates password. If it doesn't contain 1 uppercase, 1 lowercase, 1 number...it is invalid and returns false.	
+		function validate_password(){
+			var letters = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/;
+			var userPassword = document.getElementById("user_password");
+
+				if(userPassword.value ==""){
+					return false;
+				}
+				else if(!userPassword.value.match(letters)){       //For some reason, this if statement would not work if I grouped it as an or 													with the first if statement. Couldn't figure it out so gave up and split it.  
+						return false;
+				}
+
+				else{
+					return true;
+				}
+		}
+		//Validates student id. If it does not have 9 digits and only numbers, it is invalid and returns false.
+		function validate_studentid() {
+			var numbers = /^[0-9]+$/;
+			var sID = document.getElementById("student_id");
+			var sID_length = document.getElementById("student_id").value;
+
+				if (!sID.value.match(numbers) || sID_length.length !== 9) {
+					return false;
+				}
+
+				else{
+					return true;
+				}
+		}
+
+		function final(){
+			//This function start when user presses the submit button. If functions return false, it means input(s) is/are not valid and displays error for specific input. If function returns true, input is valid and displays nothing. 
+			var a = validate_username();		 //
+			var b = validate_password();     	//  All references to functions. 
+			var c = validate_studentid();       //
+
+			if(!a){
+				username_error.innerText = "Error: Must not be blank and must only contain letters";
+				username_error.style.color = "red";
+				body.style.backgroundColor = "orange";
+			}
+
+			else{
+				username_error.innerText = "";
+			}
+
+			if(!b){
+				userpassword_error.innerText ="Error: Must not be blank and must contain at least 1 uppercase, lowercase, and number";
+				userpassword_error.style.color = "red";
+				body.style.backgroundColor = "powderblue";
+			}
+
+			else{
+				userpassword_error.innerText ="";
+			}
+
+			if(!c){
+				userid_error.innerText = "Error: Must be 9 digits and only numbers";
+				userid_error.style.color = "red";
+				body.style.backgroundColor = "yellow";
+			}
+
+			else{
+				userid_error.innerText ="";
+			}
+
+			if(a && b && c){
+				success.innerText = "Success! - Your form has been submitted"; //Shows if inputs are valid
+				body.style.backgroundColor = "white";
+			}
+
+			else{
+				success.innerText =""; //Hides the success div if inputs are invalid
+			}
+		}
+
+
+		window.addEventListener("load", start, false);
+
+	</script>
+</head>
+<body>
+	<p><h1>Basic Registration Form</h1></p> 
+	<div id="body">
+		<form name="form" id="form" action="">
+
+			Username <br><input type="text" name="user_name" id="user_name"> </br>
+			<div id="username_error"></div>
+
+			Password <br><input type="Password" name="user_password" id="user_password"></br>
+			<div id="userpassword_error"></div>
+
+			Student ID <br><input type="text" name="student_id" id="student_id"></br>
+			<div id="userid_error"></div><br></br>
+
+
+
+		
+			<textarea rows="6" cols="75" name="textarea" id="textarea"></textarea>
+			
+			<div id="total" align="center"><p>You can add up to 25 words here.</p> </div> 
+
+			<br><input type="button" value="submit" name="button" id="button"></br>
+			<div style="background-color: lightgreen" id="success"></div>
+		</form>
+
+
+	</div>
+</body>
+</html>
